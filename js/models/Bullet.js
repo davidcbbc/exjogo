@@ -7,9 +7,34 @@ export default class Bullet extends Phaser.Physics.Arcade.Sprite {
         this.baseVelocity = 350;
     }
 
-    fire(x, y) {
+    fire(x, y, bullets) {
+        this.scene.physics.add.overlap(this, this.scene.enemies, (bullet, enemy) => {
+            bullets.killAndHide(this);
+            
+            this.scene.enemies.killAndHide(enemy);
+            enemy.destroy();
+            this.destroy();
+            console.log("hit");
+        });
+
+        if(x == 0 && y ==0){
+            // caso esteja parado dispara para a direita
+            x = this.baseVelocity;
+            y = 0;
+        } else {
+            if(x == 0) x = 0;
+            else if(x > 0) x = this.baseVelocity;
+            else x = -this.baseVelocity;
+            if(y == 0) y = 0;
+            else if(y > 0) y = this.baseVelocity;
+            else y = -this.baseVelocity;
+        }
+       
+        
         this.setVelocityX(x);
         this.setVelocityY(y);
+        this.active = true;
+        this.visible = true;
     }
 
     fireToEnemy(enemy) {
@@ -21,8 +46,10 @@ export default class Bullet extends Phaser.Physics.Arcade.Sprite {
         //this.setVelocityX(vx);
         //this.setVelocityY(vy);
         // OU :
-        this.scene.physics.add.overlap(this, enemy, (bird, enemy) => {
-            console.log(this);
+        this.scene.physics.add.overlap(this, enemy, (bullet, enemy) => {
+            bullet.destroy()
+            enemy.destroy();
+            console.log("hit");
         });
         this.scene.physics.moveToObject(this, enemy, this.baseVelocity);
         this.active = true;
