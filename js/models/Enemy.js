@@ -15,7 +15,7 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
 
     update(cursors, time, group) {
         this.setVelocityX(-this.baseVelocity);
-        if(this.x < 0) {
+        if (this.x < 0) {
             console.log(this.scene.enemies.getTotalUsed());
             this.scene.enemies.killAndHide(this);
             console.log(this.scene.enemies.getTotalUsed());

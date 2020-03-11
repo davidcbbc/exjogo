@@ -3,38 +3,62 @@ export default class Bullet extends Phaser.Physics.Arcade.Sprite {
         super(scene, x, y, "bullet");
         this.scene.add.existing(this);
         this.scene.physics.world.enable(this);
-
         this.baseVelocity = 350;
     }
 
-    fire(x, y, bullets) {
+    fireInDirections(x, y, bullets) {
+        this.body.gravity.set(0, 300);
         this.scene.physics.add.overlap(this, this.scene.enemies, (bullet, enemy) => {
             bullets.killAndHide(this);
-            
+
             this.scene.enemies.killAndHide(enemy);
             enemy.destroy();
             this.destroy();
             console.log("hit");
         });
 
-        if(x == 0 && y ==0){
+        if (x == 0 && y == 0) {
             // caso esteja parado dispara para a direita
             x = this.baseVelocity;
             y = 0;
         } else {
-            if(x == 0) x = 0;
-            else if(x > 0) x = this.baseVelocity;
+            if (x == 0) x = 0;
+            else if (x > 0) x = this.baseVelocity;
             else x = -this.baseVelocity;
-            if(y == 0) y = 0;
-            else if(y > 0) y = this.baseVelocity;
+            if (y == 0) y = 0;
+            else if (y > 0) y = this.baseVelocity;
             else y = -this.baseVelocity;
         }
-       
-        
         this.setVelocityX(x);
         this.setVelocityY(y);
         this.active = true;
         this.visible = true;
+    }
+
+
+
+    fire(x, bullets) {
+        this.body.gravity.set(300, 300);
+        this.scene.physics.add.overlap(this, this.scene.enemies, (bullet, enemy) => {
+            bullets.killAndHide(this);
+            this.scene.enemies.killAndHide(enemy);
+            enemy.destroy();
+            this.destroy();
+            console.log("hit");
+        });
+
+        if (x == 0) {
+            // caso esteja parado dispara para a direita
+            x = this.baseVelocity;
+        } else {
+            if (x > 0) x = this.baseVelocity;
+            else x = -this.baseVelocity;
+        }
+        console.log(x);
+        this.setVelocityX(x);
+        this.active = true;
+        this.visible = true;
+
     }
 
     fireToEnemy(enemy) {
